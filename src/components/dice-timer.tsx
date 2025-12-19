@@ -6,10 +6,16 @@ import { DiceDisplay } from "./dice-display";
 import { ControlsPanel } from "./controls-panel";
 
 function DiceTimerContent() {
-  const { pause, resume, state } = useGameContext();
+  const { pause, resume, state, skip, reset } = useGameContext();
 
   // Create shortcuts configuration
-  const shortcuts = createGameShortcuts(pause, resume, state.paused);
+  const shortcuts = createGameShortcuts(
+    state,
+    pause,
+    resume,
+    skip,
+    reset,
+  );
 
   useKeyboardShortcuts(shortcuts);
 
