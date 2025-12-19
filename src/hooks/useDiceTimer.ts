@@ -6,10 +6,8 @@ import {
   type DiceTimerSettings,
   type DiceTimerState,
 } from "@/models/types";
-import {
-  TrueRandomRandomizer,
-  BalancedRandomizer,
-} from "@/lib/dice-logic";
+import { TrueRandomRandomizer } from "@/lib/dice-logic/true-random-randomizer";
+import { BalancedRandomizer } from "@/lib/dice-logic/balanced-randomizer";
 
 export function useDiceTimer() {
   const [state, setState] = useState<DiceTimerState>({
