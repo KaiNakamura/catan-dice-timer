@@ -1,3 +1,5 @@
-# React + TypeScript + Vite + shadcn/ui
+# Catan Dice Timer
 
-This is a template for a new Vite project with React, TypeScript, and shadcn/ui.
+A tool for prototyping "Realtime Catan" over-the-board. Essentially a simple dice timer that tells you when to draw cards.
+
+Icons from [Kenney's Board Game Icons](https://kenney.nl/assets/board-game-icons)
