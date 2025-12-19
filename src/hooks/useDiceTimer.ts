@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import {
   DEFAULT_TURN_SECONDS,
   DEFAULT_ROLL_SECONDS,
-  type TimerState,
   type RandomMode,
   type DiceTimerSettings,
   type DiceTimerState,
@@ -28,8 +27,8 @@ export function useDiceTimer() {
 
   const trueRandomizer = useRef(new TrueRandomRandomizer());
   const balancedRandomizer = useRef(new BalancedRandomizer());
-  const rollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const timerIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const rollTimeoutRef = useRef<number | null>(null);
+  const timerIntervalRef = useRef<number | null>(null);
   const pendingSettingsRef = useRef<DiceTimerSettings | null>(null);
 
   // Sync balanced randomizer bucket with state when it changes
@@ -54,17 +53,16 @@ export function useDiceTimer() {
   // Roll dice based on current random mode
   const rollDice = useCallback(() => {
     let newValues: [number, number];
+    let newBucket: [number, number][] | null = null;
+    
     if (state.randomMode === "true") {
       newValues = trueRandomizer.current.roll();
     } else {
       newValues = balancedRandomizer.current.roll();
-      // Update bucket state
-      setState((prev) => ({
-        ...prev,
-        balancedBucket: balancedRandomizer.current.getBucket(),
-      }));
+      newBucket = balancedRandomizer.current.getBucket();
     }
-    return newValues;
+    
+    return { values: newValues, bucket: newBucket };
   }, [state.randomMode]);
 
   // Handle transition to ROLLING state
@@ -73,9 +71,14 @@ export function useDiceTimer() {
       // Apply pending settings when entering ROLLING
       applyPendingSettings();
 
-      // Roll dice immediately
-      const newValues = rollDice();
-      setState((prev) => ({ ...prev, diceValues: newValues }));
+      // Roll dice and set remainingSeconds to turnSeconds when entering ROLLING
+      const { values: newValues, bucket: newBucket } = rollDice();
+      setState((prev) => ({
+        ...prev,
+        diceValues: newValues,
+        remainingSeconds: prev.settings.turnSeconds,
+        ...(newBucket !== null && { balancedBucket: newBucket }),
+      }));
 
       // After ROLL_SECONDS, transition to TURN
       rollTimeoutRef.current = setTimeout(() => {

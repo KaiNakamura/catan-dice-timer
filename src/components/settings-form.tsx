@@ -51,11 +51,13 @@ export function SettingsForm() {
           onBlur={(e) => {
             const numValue = parseInt(e.target.value, 10);
             if (isNaN(numValue) || numValue < 1) {
-              setLocalSettings((prev) => ({ ...prev, turnSeconds: 1 }));
-              updateSettings({ ...localSettings, turnSeconds: 1 });
+              const newSettings = { ...localSettings, turnSeconds: 1 };
+              setLocalSettings(newSettings);
+              updateSettings(newSettings);
             } else if (numValue > 600) {
-              setLocalSettings((prev) => ({ ...prev, turnSeconds: 600 }));
-              updateSettings({ ...localSettings, turnSeconds: 600 });
+              const newSettings = { ...localSettings, turnSeconds: 600 };
+              setLocalSettings(newSettings);
+              updateSettings(newSettings);
             }
           }}
         />
@@ -72,11 +74,13 @@ export function SettingsForm() {
           onBlur={(e) => {
             const numValue = parseInt(e.target.value, 10);
             if (isNaN(numValue) || numValue < 1) {
-              setLocalSettings((prev) => ({ ...prev, rollSeconds: 1 }));
-              updateSettings({ ...localSettings, rollSeconds: 1 });
+              const newSettings = { ...localSettings, rollSeconds: 1 };
+              setLocalSettings(newSettings);
+              updateSettings(newSettings);
             } else if (numValue > 10) {
-              setLocalSettings((prev) => ({ ...prev, rollSeconds: 10 }));
-              updateSettings({ ...localSettings, rollSeconds: 10 });
+              const newSettings = { ...localSettings, rollSeconds: 10 };
+              setLocalSettings(newSettings);
+              updateSettings(newSettings);
             }
           }}
         />
