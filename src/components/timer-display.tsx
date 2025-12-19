@@ -9,8 +9,8 @@ function formatTime(seconds: number): string {
 
 export function TimerDisplay() {
   const { state } = useGameContext();
-  const formattedTime = formatTime(state.remainingSeconds);
-  const isWarning = state.remainingSeconds <= WARNING_SECONDS && state.state === "TURN";
+  const formattedTime = formatTime(state.turnRemainingSeconds);
+  const isWarning = state.turnRemainingSeconds <= WARNING_SECONDS && state.state === "TURN";
   
   return (
     <div

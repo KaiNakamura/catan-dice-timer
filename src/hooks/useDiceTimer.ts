@@ -15,7 +15,7 @@ export function useDiceTimer() {
   const [state, setState] = useState<DiceTimerState>({
     state: "READY",
     paused: true,
-    remainingSeconds: DEFAULT_TURN_SECONDS,
+    turnRemainingSeconds: DEFAULT_TURN_SECONDS,
     diceValues: [1, 1],
     settings: {
       turnSeconds: DEFAULT_TURN_SECONDS,
@@ -29,7 +29,6 @@ export function useDiceTimer() {
   const balancedRandomizer = useRef(new BalancedRandomizer());
   const rollTimeoutRef = useRef<number | null>(null);
   const timerIntervalRef = useRef<number | null>(null);
-  const pendingSettingsRef = useRef<DiceTimerSettings | null>(null);
 
   // Sync balanced randomizer bucket with state when it changes
   useEffect(() => {
@@ -37,18 +36,6 @@ export function useDiceTimer() {
       balancedRandomizer.current.setBucket(state.balancedBucket);
     }
   }, [state.balancedBucket, state.randomMode]);
-
-  // Apply pending settings on state transition
-  const applyPendingSettings = useCallback(() => {
-    if (pendingSettingsRef.current) {
-      setState((prev) => ({
-        ...prev,
-        settings: pendingSettingsRef.current!,
-        remainingSeconds: pendingSettingsRef.current!.turnSeconds,
-      }));
-      pendingSettingsRef.current = null;
-    }
-  }, []);
 
   // Roll dice based on current random mode
   const rollDice = useCallback(() => {
@@ -68,15 +55,12 @@ export function useDiceTimer() {
   // Handle transition to ROLLING state
   useEffect(() => {
     if (state.state === "ROLLING" && !state.paused) {
-      // Apply pending settings when entering ROLLING
-      applyPendingSettings();
-
-      // Roll dice and set remainingSeconds to turnSeconds when entering ROLLING
+      // Roll dice and set turnRemainingSeconds to turnSeconds when entering ROLLING
       const { values: newValues, bucket: newBucket } = rollDice();
       setState((prev) => ({
         ...prev,
         diceValues: newValues,
-        remainingSeconds: prev.settings.turnSeconds,
+        turnRemainingSeconds: prev.settings.turnSeconds,
         ...(newBucket !== null && { balancedBucket: newBucket }),
       }));
 
@@ -85,7 +69,7 @@ export function useDiceTimer() {
         setState((prev) => ({
           ...prev,
           state: "TURN",
-          remainingSeconds: prev.settings.turnSeconds,
+          turnRemainingSeconds: prev.settings.turnSeconds,
         }));
       }, state.settings.rollSeconds * 1000);
     }
@@ -96,23 +80,23 @@ export function useDiceTimer() {
         rollTimeoutRef.current = null;
       }
     };
-  }, [state.state, state.paused, state.settings.rollSeconds, rollDice, applyPendingSettings]);
+  }, [state.state, state.paused, state.settings.rollSeconds, rollDice]);
 
   // Handle timer countdown in TURN state
   useEffect(() => {
-    if (state.state === "TURN" && !state.paused && state.remainingSeconds > 0) {
+    if (state.state === "TURN" && !state.paused && state.turnRemainingSeconds > 0) {
       timerIntervalRef.current = setInterval(() => {
         setState((prev) => {
-          const newTime = prev.remainingSeconds - 1;
+          const newTime = prev.turnRemainingSeconds - 1;
           if (newTime <= 0) {
             // Transition to ROLLING when timer reaches 0
             return {
               ...prev,
               state: "ROLLING",
-              remainingSeconds: prev.settings.rollSeconds,
+              turnRemainingSeconds: prev.settings.turnSeconds,
             };
           }
-          return { ...prev, remainingSeconds: newTime };
+          return { ...prev, turnRemainingSeconds: newTime };
         });
       }, 1000);
     } else {
@@ -128,7 +112,7 @@ export function useDiceTimer() {
         timerIntervalRef.current = null;
       }
     };
-  }, [state.state, state.paused, state.remainingSeconds]);
+  }, [state.state, state.paused, state.turnRemainingSeconds]);
 
   const pause = useCallback(() => {
     setState((prev) => ({ ...prev, paused: true }));
@@ -148,14 +132,17 @@ export function useDiceTimer() {
   const reset = useCallback(() => {
     setState((prev) => ({
       ...prev,
-      remainingSeconds: prev.settings.turnSeconds,
+      turnRemainingSeconds: prev.settings.turnSeconds,
       // Keep paused state, keep balanced bucket
     }));
   }, []);
 
   const updateSettings = useCallback((newSettings: DiceTimerSettings) => {
-    // Store settings to apply on next cycle
-    pendingSettingsRef.current = newSettings;
+    // Apply settings immediately
+    setState((prev) => ({
+      ...prev,
+      settings: newSettings,
+    }));
   }, []);
 
   const setRandomMode = useCallback((mode: RandomMode) => {

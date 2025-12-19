@@ -14,7 +14,7 @@ export interface DiceTimerSettings {
 export interface DiceTimerState {
   state: TimerState;
   paused: boolean;
-  remainingSeconds: number;
+  turnRemainingSeconds: number;
   diceValues: [number, number];
   settings: DiceTimerSettings;
   randomMode: RandomMode;
