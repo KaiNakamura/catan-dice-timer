@@ -1,7 +1,7 @@
-export const DEFAULT_TURN_SECONDS = 90;
+export const DEFAULT_TURN_SECONDS = 60;
 export const DEFAULT_ROLL_SECONDS = 1;
 export const WARNING_SECONDS = 5;
-export const DICE_ROLL_INTERVAL_MS = 200;
+export const DICE_ROLL_INTERVAL_MS = 100;
 
 export type TimerState = "READY" | "ROLLING" | "TURN";
 export type RandomMode = "true" | "balanced";
