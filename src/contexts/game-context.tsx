@@ -7,6 +7,7 @@ interface GameContextValue {
   pause: () => void;
   resume: () => void;
   reset: () => void;
+  skip: () => void;
   updateSettings: (settings: DiceTimerSettings) => void;
   setRandomMode: (mode: RandomMode) => void;
 }

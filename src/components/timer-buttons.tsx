@@ -1,9 +1,9 @@
 import { useGameContext } from "@/contexts/game-context";
 import { Button } from "@/components/ui/button";
-import { PauseIcon, PlayIcon, RotateCcwIcon } from "lucide-react";
+import { PauseIcon, PlayIcon, RotateCcwIcon, SkipForwardIcon } from "lucide-react";
 
 export function TimerButtons() {
-  const { state, pause, resume, reset } = useGameContext();
+  const { state, pause, resume, reset, skip } = useGameContext();
 
   return (
     <div className="flex gap-2">
@@ -29,6 +29,14 @@ export function TimerButtons() {
       >
         <RotateCcwIcon data-icon="inline-start" />
         Reset
+      </Button>
+      <Button
+        onClick={skip}
+        disabled={state.state !== "TURN"}
+        variant="outline"
+      >
+        <SkipForwardIcon data-icon="inline-start" />
+        Skip
       </Button>
     </div>
   );

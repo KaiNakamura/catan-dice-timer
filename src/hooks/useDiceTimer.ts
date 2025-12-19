@@ -137,6 +137,22 @@ export function useDiceTimer() {
     }));
   }, []);
 
+  const skip = useCallback(() => {
+    setState((prev) => {
+      // Only skip if currently in TURN state
+      if (prev.state !== "TURN") {
+        return prev;
+      }
+      // Transition to ROLLING state, unpause
+      return {
+        ...prev,
+        state: "ROLLING",
+        turnRemainingSeconds: prev.settings.turnSeconds,
+        paused: false,
+      };
+    });
+  }, []);
+
   const updateSettings = useCallback((newSettings: DiceTimerSettings) => {
     // Apply settings immediately
     setState((prev) => ({
@@ -172,6 +188,7 @@ export function useDiceTimer() {
     pause,
     resume,
     reset,
+    skip,
     updateSettings,
     setRandomMode,
   };
