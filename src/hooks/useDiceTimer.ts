@@ -6,7 +6,7 @@ import {
 import { BalancedRandomizer } from "@/lib/dice-logic/balanced-randomizer";
 import { TrueRandomRandomizer } from "@/lib/dice-logic/true-random-randomizer";
 import {
-  DEFAULT_ROLL_SECONDS,
+  ROLL_SECONDS,
   DEFAULT_TURN_SECONDS,
   type DiceTimerSettings,
   type DiceTimerState,
@@ -22,7 +22,6 @@ export function useDiceTimer() {
     diceValues: [1, 1],
     settings: {
       turnSeconds: DEFAULT_TURN_SECONDS,
-      rollSeconds: DEFAULT_ROLL_SECONDS,
     },
     randomMode: "true",
     balancedBucket: [],
@@ -80,7 +79,7 @@ export function useDiceTimer() {
             paused: isSeven ? true : prev.paused, // Pause if 7
           };
         });
-      }, state.settings.rollSeconds * 1000);
+      }, ROLL_SECONDS * 1000);
     }
 
     return () => {
@@ -89,7 +88,7 @@ export function useDiceTimer() {
         rollTimeoutRef.current = null;
       }
     };
-  }, [state.state, state.paused, state.settings.rollSeconds, rollDice]);
+  }, [state.state, state.paused, rollDice]);
 
   // Handle timer countdown in TURN state
   useEffect(() => {

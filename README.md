@@ -2,5 +2,7 @@
 
 A tool for prototyping "Real-Time Catan" over-the-board. Essentially a simple dice timer that tells you when to draw cards.
 
-- Icons from [Kenney's Board Game Icons](https://kenney.nl/assets/board-game-icons)
-- Audio from [Kenney's Casino Audio](https://kenney.nl/assets/casino-audio)
+## Attribution
+
+- [Kenney's Board Game Icons](https://kenney.nl/assets/board-game-icons)
+- [Kenney's Casino Audio](https://kenney.nl/assets/casino-audio)
