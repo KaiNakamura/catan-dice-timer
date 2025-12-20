@@ -6,6 +6,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { playAudio, ROBBER_AUDIO_PATH } from "@/lib/audio";
+import { useEffect } from "react";
 
 interface RobberDialogProps {
   open: boolean;
@@ -25,6 +27,12 @@ export function RobberDialog({
       onContinue();
     }
   };
+
+  useEffect(() => {
+    if (open) {
+      playAudio(ROBBER_AUDIO_PATH);
+    }
+  }, [open]);
 
   return (
     <AlertDialog open={open} onOpenChange={handleOpenChange}>

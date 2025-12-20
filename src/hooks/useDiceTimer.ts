@@ -13,6 +13,7 @@ import {
   DICE_SHUFFLE_AUDIO_PATH,
   DICE_THROW_AUDIO_PATH,
 } from "@/lib/audio";
+import { OopsAllSevensRandomizer } from "@/lib/dice-logic/oops-all-sevens-randomizer";
 
 export function useDiceTimer() {
   const [state, setState] = useState<DiceTimerState>({
@@ -28,7 +29,8 @@ export function useDiceTimer() {
     balancedBucket: [],
   });
 
-  const trueRandomizer = useRef(new TrueRandomRandomizer());
+  // const trueRandomizer = useRef(new TrueRandomRandomizer());
+  const trueRandomizer = useRef(new OopsAllSevensRandomizer());
   const balancedRandomizer = useRef(new BalancedRandomizer());
   const rollTimeoutRef = useRef<number | null>(null);
   const timerIntervalRef = useRef<number | null>(null);
