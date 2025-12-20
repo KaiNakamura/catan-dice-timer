@@ -1,19 +1,18 @@
-import { useState, useEffect, useRef, useCallback } from "react";
 import {
-  DEFAULT_TURN_SECONDS,
-  DEFAULT_ROLL_SECONDS,
-  type RandomMode,
-  type DiceTimerSettings,
-  type DiceTimerState,
-} from "@/models/types";
-import { TrueRandomRandomizer } from "@/lib/dice-logic/true-random-randomizer";
-import { BalancedRandomizer } from "@/lib/dice-logic/balanced-randomizer";
-import {
-  playAudio,
   DICE_SHUFFLE_AUDIO_PATH,
   DICE_THROW_AUDIO_PATH,
+  playAudio,
 } from "@/lib/audio";
-import { OopsAllSevensRandomizer } from "@/lib/dice-logic/oops-all-sevens-randomizer";
+import { BalancedRandomizer } from "@/lib/dice-logic/balanced-randomizer";
+import { TrueRandomRandomizer } from "@/lib/dice-logic/true-random-randomizer";
+import {
+  DEFAULT_ROLL_SECONDS,
+  DEFAULT_TURN_SECONDS,
+  type DiceTimerSettings,
+  type DiceTimerState,
+  type RandomMode,
+} from "@/models/types";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export function useDiceTimer() {
   const [state, setState] = useState<DiceTimerState>({
@@ -29,8 +28,7 @@ export function useDiceTimer() {
     balancedBucket: [],
   });
 
-  // const trueRandomizer = useRef(new TrueRandomRandomizer());
-  const trueRandomizer = useRef(new OopsAllSevensRandomizer());
+  const trueRandomizer = useRef(new TrueRandomRandomizer());
   const balancedRandomizer = useRef(new BalancedRandomizer());
   const rollTimeoutRef = useRef<number | null>(null);
   const timerIntervalRef = useRef<number | null>(null);
