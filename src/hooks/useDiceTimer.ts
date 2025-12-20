@@ -8,6 +8,11 @@ import {
 } from "@/models/types";
 import { TrueRandomRandomizer } from "@/lib/dice-logic/true-random-randomizer";
 import { BalancedRandomizer } from "@/lib/dice-logic/balanced-randomizer";
+import {
+  playAudio,
+  DICE_SHUFFLE_AUDIO_PATH,
+  DICE_THROW_AUDIO_PATH,
+} from "@/lib/audio";
 
 export function useDiceTimer() {
   const [state, setState] = useState<DiceTimerState>({
@@ -174,6 +179,20 @@ export function useDiceTimer() {
       return { ...prev, randomMode: mode };
     });
   }, []);
+
+  // Play audio when entering ROLLING state
+  useEffect(() => {
+    if (state.state === "ROLLING") {
+      playAudio(DICE_SHUFFLE_AUDIO_PATH);
+    }
+  }, [state.state]);
+
+  // Play audio when entering TURN state
+  useEffect(() => {
+    if (state.state === "TURN") {
+      playAudio(DICE_THROW_AUDIO_PATH);
+    }
+  }, [state.state]);
 
   // Cleanup on unmount
   useEffect(() => {
