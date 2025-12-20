@@ -64,11 +64,17 @@ export function useDiceTimer() {
 
       // After ROLL_SECONDS, transition to TURN
       rollTimeoutRef.current = setTimeout(() => {
-        setState((prev) => ({
-          ...prev,
-          state: "TURN",
-          turnRemainingSeconds: prev.settings.turnSeconds,
-        }));
+        setState((prev) => {
+          const diceSum = prev.diceValues[0] + prev.diceValues[1];
+          const isSeven = diceSum === 7;
+
+          return {
+            ...prev,
+            state: "TURN",
+            turnRemainingSeconds: prev.settings.turnSeconds,
+            paused: isSeven ? true : prev.paused, // Pause if 7
+          };
+        });
       }, state.settings.rollSeconds * 1000);
     }
 
