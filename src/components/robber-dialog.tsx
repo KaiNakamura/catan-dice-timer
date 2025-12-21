@@ -52,8 +52,7 @@ export function RobberDialog({
               <li>
                 The <strong>player in last gets to place</strong> the robber
                 <ul className="list-disc list-inside ml-6 mt-2 space-y-2">
-                  <li>Ranked first by <em>visible</em> victory points</li>
-                  <li>Then ranked by number of resource cards</li>
+                  <li>Ranked by number of resource cards</li>
                 </ul>
               </li>
             </ul>
