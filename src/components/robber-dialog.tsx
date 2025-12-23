@@ -50,9 +50,9 @@ export function RobberDialog({
             <ul className="list-disc list-inside space-y-3">
               <li>Players with &gt;7 cards discard half (rounded down)</li>
               <li>
-                The <strong>player in last gets to place</strong> the robber
+                The <strong>player with the fewest resource cards</strong> places the robber
                 <ul className="list-disc list-inside ml-6 mt-2 space-y-2">
-                  <li>Ranked by number of resource cards</li>
+                  <li>Tiebreaker, number of <em>visible</em> victory points</li>
                 </ul>
               </li>
             </ul>
